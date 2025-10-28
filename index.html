@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LaunchMate User Value Survey Analysis</title>
+    <title>LaunchMate User Value Survey - 9 Responses</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -21,7 +22,7 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 16px;
@@ -32,59 +33,96 @@
         header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 40px;
+            padding: 50px 40px;
             text-align: center;
         }
         
         header h1 {
-            font-size: 2.5em;
+            font-size: 2.8em;
             margin-bottom: 10px;
+            font-weight: 700;
         }
         
         header p {
-            font-size: 1.2em;
-            opacity: 0.9;
+            font-size: 1.3em;
+            opacity: 0.95;
         }
         
         .headline {
-            background: #f8f9fa;
-            padding: 30px;
-            border-left: 5px solid #667eea;
-            margin: 30px;
-            font-size: 1.2em;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 35px;
+            margin: 40px;
+            border-radius: 12px;
+            font-size: 1.3em;
             font-weight: 600;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.3);
         }
         
-        .metric-cards {
+        .metric-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 30px;
+            gap: 25px;
+            padding: 40px;
         }
         
         .metric-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 30px;
-            border-radius: 12px;
+            padding: 35px;
+            border-radius: 15px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            transition: transform 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
         }
         
         .metric-card .number {
-            font-size: 3em;
+            font-size: 4em;
             font-weight: bold;
             margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
         
         .metric-card .label {
-            font-size: 1.1em;
-            opacity: 0.9;
+            font-size: 1.2em;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+        
+        .chart-section {
+            padding: 40px;
+            background: #f8f9fa;
+        }
+        
+        .chart-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .chart-box h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            color: #667eea;
         }
         
         section {
-            padding: 30px;
-            border-bottom: 1px solid #eee;
+            padding: 40px;
+            border-bottom: 1px solid #e9ecef;
         }
         
         section:last-child {
@@ -92,23 +130,30 @@
         }
         
         section h2 {
-            font-size: 1.8em;
-            margin-bottom: 20px;
+            font-size: 2em;
+            margin-bottom: 25px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         
         .working { color: #28a745; }
         .broken { color: #dc3545; }
         .attention { color: #ffc107; }
+        .new { color: #17a2b8; }
         
         .insight-box {
             background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 4px solid #667eea;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .insight-box:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateX(5px);
         }
         
         .insight-box.working {
@@ -126,111 +171,137 @@
             background: #fffbf0;
         }
         
+        .insight-box.new {
+            border-left-color: #17a2b8;
+            background: #f0f9fb;
+        }
+        
         .insight-box h3 {
-            font-size: 1.2em;
-            margin-bottom: 10px;
+            font-size: 1.3em;
+            margin-bottom: 12px;
         }
         
         .quote {
             font-style: italic;
-            color: #666;
-            padding: 10px 0;
-            border-left: 3px solid #ddd;
-            padding-left: 15px;
-            margin: 10px 0;
+            color: #555;
+            padding: 15px;
+            border-left: 3px solid #ccc;
+            margin: 12px 0;
+            background: white;
+            border-radius: 5px;
+            font-size: 0.95em;
         }
         
         .action {
             background: #fff3cd;
-            padding: 12px;
-            border-radius: 6px;
-            margin-top: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 12px;
             font-weight: 600;
             color: #856404;
+            border-left: 4px solid #ffc107;
         }
         
-        .priority-list {
+        .priority-grid {
             display: grid;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 20px;
+            margin-top: 25px;
         }
         
         .priority-item {
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            border: 2px solid #eee;
+            padding: 25px;
+            border-radius: 10px;
+            border: 3px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .priority-item:hover {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
         
         .priority-item.tier1 {
             border-color: #dc3545;
-            background: #fef5f5;
+            background: linear-gradient(135deg, #fff 0%, #fef5f5 100%);
         }
         
         .priority-item.tier2 {
             border-color: #ffc107;
-            background: #fffbf0;
+            background: linear-gradient(135deg, #fff 0%, #fffbf0 100%);
         }
         
         .priority-item.tier3 {
             border-color: #28a745;
-            background: #f1f9f4;
+            background: linear-gradient(135deg, #fff 0%, #f1f9f4 100%);
         }
         
         .priority-item h4 {
-            margin-bottom: 10px;
-            font-size: 1.1em;
+            margin-bottom: 15px;
+            font-size: 1.3em;
         }
         
         .priority-item ul {
-            margin-left: 20px;
+            margin-left: 25px;
+            line-height: 1.8;
         }
         
         .key-insight {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 40px;
-            margin: 30px;
-            border-radius: 12px;
-            font-size: 1.1em;
-            line-height: 1.8;
+            padding: 50px;
+            margin: 40px;
+            border-radius: 15px;
+            font-size: 1.15em;
+            line-height: 1.9;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
         }
         
         .key-insight h3 {
-            font-size: 1.5em;
-            margin-bottom: 15px;
+            font-size: 1.8em;
+            margin-bottom: 20px;
         }
         
         .key-insight strong {
-            font-size: 1.2em;
+            font-size: 1.25em;
             display: block;
-            margin: 15px 0;
+            margin: 20px 0;
+        }
+        
+        .trend-indicator {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px 5px;
+            font-size: 0.9em;
         }
         
         footer {
             text-align: center;
-            padding: 30px;
-            background: #f8f9fa;
-            color: #666;
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 30px;
-            background: #e9ecef;
-            border-radius: 15px;
-            overflow: hidden;
-            margin: 20px 0;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 40px;
+            background: #2d3436;
             color: white;
-            font-weight: bold;
+        }
+        
+        footer p {
+            margin: 5px 0;
+            opacity: 0.9;
+        }
+        
+        @media (max-width: 768px) {
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 2em;
+            }
+            
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -238,52 +309,98 @@
     <div class="container">
         <header>
             <h1>📊 LaunchMate User Value Survey</h1>
-            <p>Comprehensive Analysis of User Feedback</p>
+            <p>Comprehensive Analysis | 9 User Responses | October 2025</p>
         </header>
         
         <div class="headline">
-            <strong>HEADLINE:</strong> 67% would be disappointed if LaunchMate stopped, BUT the system has critical UX and technical issues preventing full value realization.
+            <strong>HEADLINE:</strong> 78% would be disappointed if LaunchMate stopped (+11% from last survey!), BUT critical UX and technical issues still prevent full value realization.
+            <div style="margin-top: 15px;">
+                <span class="trend-indicator">📈 IMPROVING: 67% → 78% satisfaction</span>
+            </div>
         </div>
         
-        <div class="metric-cards">
+        <div class="metric-grid">
             <div class="metric-card">
-                <div class="number">67%</div>
+                <div class="number">78%</div>
                 <div class="label">Would Be Disappointed</div>
             </div>
             <div class="metric-card">
-                <div class="number">6</div>
+                <div class="number">9</div>
                 <div class="label">Total Responses</div>
             </div>
             <div class="metric-card">
-                <div class="number">70%</div>
-                <div class="label">Product Completion</div>
+                <div class="number">+11%</div>
+                <div class="label">Satisfaction Increase</div>
+            </div>
+            <div class="metric-card">
+                <div class="number">75%</div>
+                <div class="label">Estimated Completion</div>
             </div>
         </div>
         
-        <div class="progress-bar">
-            <div class="progress-fill" style="width: 70%;">70% There</div>
+        <div class="chart-section">
+            <h2 style="text-align: center; margin-bottom: 30px; color: #667eea;">📈 Visual Analysis</h2>
+            
+            <div class="chart-container">
+                <div class="chart-box">
+                    <h3>Would You Be Disappointed?</h3>
+                    <canvas id="satisfactionChart"></canvas>
+                </div>
+                
+                <div class="chart-box">
+                    <h3>Satisfaction Trend</h3>
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-box">
+                    <h3>Top Issues Mentioned</h3>
+                    <canvas id="issuesChart"></canvas>
+                </div>
+                
+                <div class="chart-box">
+                    <h3>Most Valued Features</h3>
+                    <canvas id="featuresChart"></canvas>
+                </div>
+            </div>
         </div>
         
         <section>
             <h2><span class="working">✅</span> What's Working (Don't Break This)</h2>
             
             <div class="insight-box working">
-                <h3>1. Feedback Quality & Direction</h3>
+                <h3>1. Feedback Quality & Strategic Guidance</h3>
                 <div class="quote">"I absolutely love the feedback it provides, especially suggestions for next steps"</div>
-                <div class="quote">"Good direction and ideas from LaunchMate"</div>
-                <p>Users value the AI's guidance and strategic insights</p>
+                <div class="quote">"I have received good direction and ideas from LaunchMate"</div>
+                <p><strong>✨ Core value validated:</strong> Users consistently praise AI-powered strategic insights and next-step recommendations</p>
             </div>
             
             <div class="insight-box working">
                 <h3>2. Accountability System</h3>
                 <div class="quote">"I like the accountability of the check ins"</div>
-                <p><strong>Core value prop is validated</strong> - founders need accountability</p>
+                <div class="quote">"It's been improving and I'm happy about it"</div>
+                <p><strong>✨ Check-in concept works:</strong> Founders value structured accountability touchpoints</p>
             </div>
             
             <div class="insight-box working">
-                <h3>3. Note/Meeting Upload Feature</h3>
-                <div class="quote">"ability to upload notes and meetings into the app"</div>
-                <p>Context-rich interactions are appreciated</p>
+                <h3>3. Advisor/Coordinator Communication Bridge</h3>
+                <div class="quote">"LaunchMate makes it easier for us to be heard, and because the mentors and leaders at ZIP review our updates, they're able to offer valuable guidance"</div>
+                <div class="quote">"It's been a good check-in for my advisor"</div>
+                <p><strong>✨ NEW INSIGHT:</strong> LaunchMate successfully bridges communication between founders and advisors, enabling more efficient mentorship</p>
+            </div>
+            
+            <div class="insight-box working">
+                <h3>4. Context Upload Feature</h3>
+                <div class="quote">"The ability to upload notes and meetings into the app"</div>
+                <p><strong>✨ Rich context appreciated:</strong> Founders value being able to share meeting notes and documents</p>
+            </div>
+            
+            <div class="insight-box working">
+                <h3>5. Vision & Innovation Recognition</h3>
+                <div class="quote">"I see the vision of Launchmate and believe it can be a great help... It shows they are willing to adapt to the current state of technology"</div>
+                <div class="quote">"I do not feel like I am missing out because I do not go to an 'elite' private university"</div>
+                <p><strong>✨ Brand equity:</strong> Users appreciate SDSU/ZIP's commitment to innovation and cutting-edge tools</p>
             </div>
         </section>
         
@@ -293,75 +410,114 @@
             <div class="insight-box broken">
                 <h3>1. CRITICAL: Technical Reliability Issues</h3>
                 <div class="quote">"Can be buggy at times and decide to just not work"</div>
-                <div class="quote">"functionality repairs are needed before having it offered/required"</div>
-                <div class="action">⚡ ACTION: Identify and fix bugs blocking check-ins. This is preventing adoption.</div>
+                <div class="quote">"Functionality repairs are needed before having it offered/required"</div>
+                <div class="action">⚡ ACTION: Identify and fix bugs preventing check-ins. This is THE blocker for required adoption.</div>
             </div>
             
             <div class="insight-box broken">
                 <h3>2. CRITICAL: Check-In Structure Feels Unnatural</h3>
-                <div class="quote">"feels unnatural to stop myself from finishing an explanation to wait for the prompt"</div>
+                <div class="quote">"I wish there was less structure for the check in... It feels unnatural to stop myself from finishing an explanation to wait for the prompt"</div>
                 <div class="quote">"I end up writing down what I tried, what the result was, and what's next for each subject, then repeat myself"</div>
-                <p><strong>THE PROBLEM:</strong> 3-question structure fragments natural founder thinking</p>
-                <div class="action">⚡ ACTION: Test more conversational check-in flow: open first question → AI analyzes → asks follow-ups IF needed</div>
+                <p><strong>THE PROBLEM:</strong> 3-question format fragments natural founder thinking</p>
+                <div class="action">⚡ ACTION: Test conversational check-in flow: open first question → AI analyzes → asks follow-ups IF needed</div>
             </div>
             
             <div class="insight-box broken">
                 <h3>3. No Team Collaboration Features</h3>
-                <div class="quote">"my co-founder and I have separate accounts, so when one of us updates, the other cannot see it"</div>
-                <div class="action">⚡ ACTION: Build shared team visibility - co-founders should see each other's updates</div>
+                <div class="quote">"My co-founder and I have separate accounts, so when one of us updates, the other cannot see it"</div>
+                <div class="action">⚡ ACTION: Build shared team visibility - co-founders MUST see each other's updates</div>
             </div>
         </section>
         
         <section>
-            <h2><span class="attention">⚠️</span> What Needs Attention (Monitor Closely)</h2>
+            <h2><span class="attention">⚠️</span> What Needs Attention (High Priority)</h2>
             
             <div class="insight-box attention">
                 <h3>1. Notification/Reminder System Missing</h3>
                 <div class="quote">"I do need a nudge via email or text to remind me to log in"</div>
-                <p>Users want to engage but forget</p>
+                <p><strong>Adoption barrier:</strong> Users want to engage but forget without prompts</p>
                 <div class="action">📧 ACTION: Build email/SMS reminder system for check-ins</div>
             </div>
             
             <div class="insight-box attention">
                 <h3>2. Goal/Timeline/Calendar Integration</h3>
-                <div class="quote">"needs better goal/timeline/deadline setting and sent them to a calendar"</div>
-                <p>Users want actionable task management, not just conversation</p>
-                <div class="action">📅 ACTION: Test calendar integration or structured goal tracking</div>
+                <div class="quote">"Needs to be able to set up goals, timelines, and deadlines more efficiently and sent them to a calendar"</div>
+                <p><strong>Task management gap:</strong> Users want actionable outputs, not just conversation</p>
+                <div class="action">📅 ACTION: Implement calendar integration (Google Calendar one-click feature)</div>
             </div>
             
             <div class="insight-box attention">
-                <h3>3. Value Perception Problem</h3>
-                <div class="quote">"just another 'person' I need to check in with. I don't get any real value out of it besides another task"</div>
-                <p><strong>THE PROBLEM:</strong> For some users, check-ins feel like obligation without ROI</p>
-                <div class="action">💡 ACTION: Experiment with pairing LaunchMate with other services (mentoring, resources) to increase perceived value</div>
+                <h3>3. Resistance to Regular Usage</h3>
+                <div class="quote">"I am guilty of not using it as much as I should. I have felt a resistance to using it"</div>
+                <div class="quote">"Just another 'person' I need to check in with. I don't get any real value out of it besides another task"</div>
+                <p><strong>Value perception problem:</strong> For some users, check-ins feel like obligation without clear ROI</p>
+                <div class="action">💡 ACTION: Pair LaunchMate with high-value services (mentoring, resources, connections) to increase perceived value</div>
+            </div>
+        </section>
+        
+        <section>
+            <h2><span class="new">🆕</span> New Insights from Recent Responses</h2>
+            
+            <div class="insight-box new">
+                <h3>1. Data Privacy & Security Concerns</h3>
+                <div class="quote">"I am a little concerned about where the data goes after I put it in... Should the exact formula of what we are doing be accessed by outsiders, they could potentially take our ideas"</div>
+                <div class="quote">"I would feel better if I knew Launchmate was being stored locally at SDSU... I would rather my data be in the hands of educators, for the purpose of helping students, than of companies"</div>
+                <p><strong>Trust issue:</strong> Founders worry about IP protection and data usage by LLM providers</p>
+                <div class="action">🔒 ACTION: Create transparent data privacy policy; explore local LLM hosting options; communicate clearly where data goes</div>
+            </div>
+            
+            <div class="insight-box new">
+                <h3>2. Onboarding Challenge (Mid-Journey Adoption)</h3>
+                <div class="quote">"It has been a little hard backtracking and getting Launchmate up to date with everything since our startup journey started"</div>
+                <p><strong>Adoption friction:</strong> Founders joining mid-journey struggle to contextualize LaunchMate with existing progress</p>
+                <div class="action">🚀 ACTION: Build "Quick Start" onboarding flow for founders joining programs mid-semester</div>
+            </div>
+            
+            <div class="insight-box new">
+                <h3>3. Balance Between AI & Human Mentorship</h3>
+                <div class="quote">"Sometimes it does feel like Launchmate or AI tools in general are being utilized as a full substitute to the direct communication... Recently there was a more hands-on intervention by the coordinators and we gained a lot from that"</div>
+                <p><strong>Integration challenge:</strong> Users want AI augmentation, not replacement of human mentorship</p>
+                <div class="action">🤝 ACTION: Position LaunchMate as mentor-enhancement tool, not substitute; integrate coordinator reviews into workflow</div>
+            </div>
+            
+            <div class="insight-box new">
+                <h3>4. Potential Use Case: Pre-Acceptance Track</h3>
+                <div class="quote">"Launchmate could be an option for me and others [who got denied] to refine the ideas more or try things out... accept more students and give students a chance to figure out if they even have the bandwidth"</div>
+                <p><strong>Growth opportunity:</strong> LaunchMate could enable a virtual pre-incubator track for applicants</p>
+                <div class="action">💡 STRATEGIC: Explore LaunchMate as standalone pre-acceptance track for aspiring founders</div>
             </div>
         </section>
         
         <section>
             <h2>🎯 Actionable Priority List</h2>
             
-            <div class="priority-list">
+            <div class="priority-grid">
                 <div class="priority-item tier1">
                     <h4>🔴 TIER 1 - DO THIS WEEK</h4>
                     <ul>
-                        <li>Fix bugs preventing check-ins (blocking user adoption)</li>
-                        <li>Test conversational check-in flow with 2-3 users (address "unnatural structure" complaint)</li>
+                        <li><strong>Fix technical bugs</strong> preventing check-ins (blocking required adoption)</li>
+                        <li><strong>Test conversational check-in flow</strong> with 2-3 users (address "unnatural structure" complaint)</li>
+                        <li><strong>Create data privacy FAQ</strong> addressing IP protection and LLM data usage concerns</li>
                     </ul>
                 </div>
                 
                 <div class="priority-item tier2">
                     <h4>🟡 TIER 2 - DO THIS MONTH</h4>
                     <ul>
-                        <li>Build shared team visibility for co-founders</li>
-                        <li>Implement email/SMS reminder system</li>
-                        <li>Investigate calendar integration for goals/deadlines</li>
+                        <li><strong>Build shared team visibility</strong> for co-founders (critical feature gap)</li>
+                        <li><strong>Implement email/SMS reminder system</strong> (increase engagement)</li>
+                        <li><strong>Deploy calendar integration</strong> (Google Calendar one-click feature)</li>
+                        <li><strong>Create "Quick Start" onboarding</strong> for mid-journey founders</li>
                     </ul>
                 </div>
                 
                 <div class="priority-item tier3">
-                    <h4>🟢 TIER 3 - STRATEGIC</h4>
+                    <h4>🟢 TIER 3 - STRATEGIC (Next Quarter)</h4>
                     <ul>
-                        <li>Explore bundling LaunchMate with mentoring or other services to increase value perception</li>
+                        <li><strong>Explore local LLM hosting</strong> for enhanced data privacy</li>
+                        <li><strong>Integrate coordinator review workflow</strong> (balance AI + human mentorship)</li>
+                        <li><strong>Pilot pre-acceptance track</strong> using LaunchMate for applicants</li>
+                        <li><strong>Bundle with high-value services</strong> (mentoring, resources) to increase perceived ROI</li>
                     </ul>
                 </div>
             </div>
@@ -369,17 +525,157 @@
         
         <div class="key-insight">
             <h3>💡 KEY INSIGHT</h3>
-            <strong>The Paradox:</strong> Users love the accountability and feedback quality, but hate the rigid structure and bugs. LaunchMate has product-market fit for the CONCEPT, but execution issues prevent full value realization.
+            <strong>The Progress:</strong> 
+            Satisfaction increased from 67% to 78% (+11%) between surveys, indicating product improvements are working. Users recognize LaunchMate's vision and appreciate the innovation.
             <br><br>
-            <strong>Translation:</strong> You're 70% there. Fix the check-in UX and technical reliability, and you'll convert the "No" responses to "Yes."
+            <strong>The Paradox:</strong> 
+            Users love the accountability, feedback quality, and advisor communication bridge, but rigid structure, technical bugs, and privacy concerns create friction. LaunchMate has strong product-market fit for the CONCEPT, but execution gaps prevent full value realization.
             <br><br>
-            The survey validates that founders WANT AI accountability - they just need it to work smoothly and feel natural. 🚀
+            <strong>The Opportunity:</strong>
+            New insights reveal expansion opportunities (pre-acceptance track) and deeper trust-building needs (data privacy transparency). Users want AI to augment human mentorship, not replace it.
+            <br><br>
+            <strong>Translation:</strong> 
+            You're 75% there. Fix the critical bugs, make check-ins conversational, add team collaboration, and address privacy concerns - you'll push satisfaction to 90%+ and convert the "No" responses to "Yes."
+            <br><br>
+            <p style="font-size: 1.3em; margin-top: 25px; font-weight: bold; text-align: center;">
+                The survey validates that founders WANT AI accountability - they just need it to work smoothly, respect their privacy, and feel natural. 🚀
+            </p>
         </div>
         
         <footer>
-            <p>Generated: October 21, 2025</p>
-            <p>Analysis based on 6 user survey responses</p>
+            <p><strong>Generated:</strong> October 28, 2025</p>
+            <p>Analysis based on 9 user survey responses</p>
+            <p>LaunchMate Internal Analysis | ZIP Launchpad @ SDSU</p>
         </footer>
     </div>
+    
+    <script>
+        // Satisfaction Pie Chart
+        const satisfactionCtx = document.getElementById('satisfactionChart').getContext('2d');
+        new Chart(satisfactionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Yes, Disappointed (78%)', 'No (22%)'],
+                datasets: [{
+                    data: [7, 2],
+                    backgroundColor: ['#28a745', '#dc3545'],
+                    borderWidth: 3,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 14 },
+                            padding: 15
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Trend Line Chart
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: ['Survey 1 (6 responses)', 'Survey 2 (9 responses)'],
+                datasets: [{
+                    label: 'Satisfaction %',
+                    data: [67, 78],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        // Top Issues Bar Chart
+        const issuesCtx = document.getElementById('issuesChart').getContext('2d');
+        new Chart(issuesCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Technical Bugs', 'Rigid Structure', 'No Team Visibility', 'No Reminders', 'Privacy Concerns'],
+                datasets: [{
+                    label: 'Mentions',
+                    data: [3, 2, 2, 2, 2],
+                    backgroundColor: '#dc3545',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        // Top Features Bar Chart
+        const featuresCtx = document.getElementById('featuresChart').getContext('2d');
+        new Chart(featuresCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Feedback Quality', 'Accountability', 'Advisor Bridge', 'Upload Notes', 'Vision'],
+                datasets: [{
+                    label: 'Mentions',
+                    data: [5, 4, 3, 2, 2],
+                    backgroundColor: '#28a745',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
